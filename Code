@@ -3,9 +3,10 @@ from PIL import Image, ImageTk
 
 root = tk.Tk()
 root.title("Cool GUI Program")
-root.geometry('600x400')
+root.configure(bg='black')
+root.geometry('1000x800')
 root.attributes("-fullscreen", True)
-root.configure(bg = 'DarkGrey')
+
 
 # BASIC FUNCTIONS
 
@@ -16,20 +17,93 @@ def enter_fs(event=None):
 def exit_fs(event=None):
     root.attributes("-fullscreen", False)
 
+def skip_intro(event=None):
+    fade_out()
 
 root.bind('<F11>', enter_fs)
 root.bind('<Escape>', exit_fs)
-
+root.bind('F2', skip_intro)
 # INTRO ANIMATION
 # Intro Frame
-intro_frame = tk.Frame(root, bg = 'DarkGrey')
+intro_frame = tk.Frame(root, bg='black')
 intro_frame.pack(fill = 'both', expand = True)
 
-intro_image = Image.open('js_logo.png')
-intro_image = intro_image.resize((600, 600))
+intro_image = Image.open('new_logo.png')
+intro_image = intro_image.resize((400, 400))
 logo_image = ImageTk.PhotoImage(intro_image)
 
-logo_label = tk.Label(intro_frame, image = logo_image, bg = 'DarkGrey')
+logo_label = tk.Label(intro_frame, image = logo_image)
+logo_label.pack(pady=(180, 5))
+
+intro_text = tk.Label(
+    intro_frame,
+    text='Jackson Swiderski',
+    font=('Arial', 30, 'bold'),
+    fg='#000000',
+    bg='black'
+)
+
+intro_text.pack()
+
+# INTRO ANIMATION FUNCTIONS
+
+def fade_in(step = 0):
+    if step > 100:
+        return
+    img = intro_image.copy().convert('RGBA')
+    alpha = int(255 * (step / 100))
+    img.putalpha(alpha)
+
+    tk_logo_image = ImageTk.PhotoImage(img)
+
+    logo_label.config(image = tk_logo_image)
+    logo_label.image = tk_logo_image
+
+    root.after(30, fade_in, step + 5)
+
+def fade_text(step = 0):
+    if step > 100:
+        root.after(1500, fade_out)
+        return
+
+    gray_val = int(255 * (step/100))
+
+    intro_text_color = f'#{gray_val:02x}{gray_val:02x}{gray_val:02x}'
+    intro_text.config(fg=intro_text_color)
+
+    root.after(30, fade_text, step + 5)
+
+def fade_out(step = 100):
+    if step < 0:
+        intro_frame.destroy()
+        welcome_frame.pack(fill='both', expand=True)
+        return
+    # Fade Image
+    img = intro_image.copy().convert('RGBA')
+    alpha = int(255 * (step / 100))
+    img.putalpha(alpha)
+
+    tk_logo_image = ImageTk.PhotoImage(img)
+
+    logo_label.config(image=tk_logo_image)
+    logo_label.image = tk_logo_image
+
+    root.after(30, fade_out, step - 15)
+
+# Welcome Frame
+
+welcome_frame = tk.Frame(root, bg='black')
+
+welcome_label = tk.Label(
+    welcome_frame,
+    text='Welcome!',
+    font=('Arial', 40, 'bold'),
+    fg='#000000',
+    bg='black'
+)
+welcome_label.pack(expand=True)
 
 
+fade_in()
+root.after(500, fade_text)
 root.mainloop()
