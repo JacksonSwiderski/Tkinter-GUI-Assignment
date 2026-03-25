@@ -22,7 +22,7 @@ def skip_intro(event=None):
 
 root.bind('<F11>', enter_fs)
 root.bind('<Escape>', exit_fs)
-root.bind('F2', skip_intro)
+root.bind('<space>', skip_intro)
 # INTRO ANIMATION
 # Intro Frame
 intro_frame = tk.Frame(root, bg='black')
@@ -98,11 +98,27 @@ welcome_label = tk.Label(
     welcome_frame,
     text='Welcome!',
     font=('Arial', 40, 'bold'),
-    fg='#000000',
+    fg='white',
     bg='black'
 )
-welcome_label.pack(expand=True)
+welcome_label.pack(pady=(180, 5))
 
+description_label = tk.Label(
+    welcome_frame,
+    text='This is my official GUI for my Tkinter Assignment. This is a calculator program for simple physics kinematics and force equations. Press the button below to continue...',
+    padx=400,
+    wraplength=600,
+    font=('Arial', 25),
+    fg='white',
+    bg='black'
+)
+description_label.pack(pady=(0, 5))
+
+continue_button = tk.Button(
+    welcome_frame,
+    text='Continue',
+)
+continue_button.pack(expand=True)
 
 fade_in()
 root.after(500, fade_text)
