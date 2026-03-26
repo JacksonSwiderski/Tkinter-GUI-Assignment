@@ -1,18 +1,17 @@
-import tkinter as tk
+import customtkinter as tk
 from PIL import Image, ImageTk
 
-root = tk.Tk()
+tk.set_appearance_mode('dark')
+
+root = tk.CTk()
 root.title("Cool GUI Program")
-root.configure(bg='black')
 root.geometry('1000x800')
 root.attributes("-fullscreen", True)
-
 
 # BASIC FUNCTIONS
 
 def enter_fs(event=None):
     root.attributes("-fullscreen", True)
-
 
 def exit_fs(event=None):
     root.attributes("-fullscreen", False)
@@ -23,103 +22,144 @@ def skip_intro(event=None):
 root.bind('<F11>', enter_fs)
 root.bind('<Escape>', exit_fs)
 root.bind('<space>', skip_intro)
-# INTRO ANIMATION
-# Intro Frame
-intro_frame = tk.Frame(root, bg='black')
-intro_frame.pack(fill = 'both', expand = True)
 
-intro_image = Image.open('new_logo.png')
-intro_image = intro_image.resize((400, 400))
+# INTRO FRAME
+intro_frame = tk.CTkFrame(root, fg_color="black")
+intro_frame.pack(fill='both', expand=True)
+
+intro_image = Image.open('new_logo.png').resize((400, 400))
 logo_image = ImageTk.PhotoImage(intro_image)
 
-logo_label = tk.Label(intro_frame, image = logo_image)
+logo_label = tk.CTkLabel(intro_frame, image=logo_image, text="")
 logo_label.pack(pady=(180, 5))
 
-intro_text = tk.Label(
+intro_text = tk.CTkLabel(
     intro_frame,
     text='Jackson Swiderski',
     font=('Arial', 30, 'bold'),
-    fg='#000000',
-    bg='black'
+    text_color="black"
 )
-
 intro_text.pack()
 
-# INTRO ANIMATION FUNCTIONS
+# INTRO ANIMATION
 
-def fade_in(step = 0):
+def fade_in(step=0):
     if step > 100:
         return
+
     img = intro_image.copy().convert('RGBA')
     alpha = int(255 * (step / 100))
     img.putalpha(alpha)
 
     tk_logo_image = ImageTk.PhotoImage(img)
 
-    logo_label.config(image = tk_logo_image)
-    logo_label.image = tk_logo_image
+    logo_label.configure(image=tk_logo_image)
+    logo_label.image = tk_logo_image  # prevent garbage collection
 
     root.after(30, fade_in, step + 5)
 
-def fade_text(step = 0):
+def fade_text(step=0):
     if step > 100:
         root.after(1500, fade_out)
         return
 
-    gray_val = int(255 * (step/100))
+    gray_val = int(255 * (step / 100))
+    color = f'#{gray_val:02x}{gray_val:02x}{gray_val:02x}'
 
-    intro_text_color = f'#{gray_val:02x}{gray_val:02x}{gray_val:02x}'
-    intro_text.config(fg=intro_text_color)
+    intro_text.configure(text_color=color)
 
     root.after(30, fade_text, step + 5)
 
-def fade_out(step = 100):
+def fade_out(step=100):
     if step < 0:
         intro_frame.destroy()
         welcome_frame.pack(fill='both', expand=True)
         return
-    # Fade Image
+
     img = intro_image.copy().convert('RGBA')
     alpha = int(255 * (step / 100))
     img.putalpha(alpha)
 
     tk_logo_image = ImageTk.PhotoImage(img)
 
-    logo_label.config(image=tk_logo_image)
+    logo_label.configure(image=tk_logo_image)
     logo_label.image = tk_logo_image
 
-    root.after(30, fade_out, step - 15)
+    root.after(30, fade_out, step - 10)
 
-# Welcome Frame
+# MAIN PROGRAM
 
-welcome_frame = tk.Frame(root, bg='black')
+def continue_to_program():
+    root.bind('<Tab>', settings_frame)
+    welcome_frame.destroy()
+    main_frame.pack(fill='both', expand=True)
 
-welcome_label = tk.Label(
+# WELCOME FRAME
+
+welcome_frame = tk.CTkFrame(root, fg_color="black")
+
+welcome_label = tk.CTkLabel(
     welcome_frame,
     text='Welcome!',
     font=('Arial', 40, 'bold'),
-    fg='white',
-    bg='black'
+    text_color="white"
 )
-welcome_label.pack(pady=(180, 5))
+welcome_label.pack(pady=(180, 20))
 
-description_label = tk.Label(
+description_label = tk.CTkLabel(
     welcome_frame,
-    text='This is my official GUI for my Tkinter Assignment. This is a calculator program for simple physics kinematics and force equations. Press the button below to continue...',
-    padx=400,
+    text='This is my official GUI for my Tkinter Assignment.\n'
+         'This is a calculator program for simple physics kinematics and force equations.\n\n'
+         'Press ESC to exit fullscreen, F11 to re-enter.\n'
+         'Additionally, press Tab to enter the settings menu.\n\n'
+         'Press the button below to continue...',
     wraplength=600,
     font=('Arial', 25),
-    fg='white',
-    bg='black'
+    text_color="white",
+    justify="center"
 )
-description_label.pack(pady=(0, 5))
+description_label.pack(pady=(0, 15))
 
-continue_button = tk.Button(
+continue_button = tk.CTkButton(
     welcome_frame,
     text='Continue',
+    font=('Arial', 14),
+    border_width=2,
+    command=continue_to_program
 )
-continue_button.pack(expand=True)
+continue_button.pack(pady=40)
 
+# Main Frame
+
+main_frame = tk.CTkFrame(root, fg_color='black')
+
+title_label = tk.CTkLabel(
+    main_frame,
+    text='BASIC KINEMATICS/FORCE CALCULATOR',
+    font=('Arial', 30, 'bold'),
+    text_color='white',
+    justify='center'
+)
+title_label.pack(pady=40)
+
+# Conversion Dropdown
+def conv_change(*args):
+    selection = conv_var.get()
+
+conv_var = tk.StringVar(root)
+conv_var.set('Select your desired conversion.')
+conv_var.trace('w', conv_change)
+conv_options = ['m/s to km/h', 'km/h to m/s', 'km/h to miles/h',
+                'miles/h to km/h', 'm/s to miles/h', 'miles/h to m/s']
+conv_menu = tk.CTkOptionMenu(main_frame, conv_var, *conv_options)
+
+# Settings Frame
+
+def settings_frame(event=None):
+    print('Hello')
+
+# START ANIMATION
 fade_in()
 root.after(500, fade_text)
+
 root.mainloop()
