@@ -8,8 +8,10 @@ root.title("Cool GUI Program")
 root.geometry('1000x800')
 root.attributes("-fullscreen", True)
 
-unit_system = 'undefined'
+unit_system = 'Imperial System'
 conv_options = ['Select Unit System']
+kine_options = ['Speed/Velocity', 'Time', 'Distance/Displacement', 'Acceleration']
+
 
 # BASIC FUNCTIONS
 
@@ -150,10 +152,83 @@ title_label.grid(row=1, column=1, pady=40)
 
 # Math Functions
 
-def convert(conv_entry):
-    print(f'Hello. Entry: {conv_entry}')
+def convert():
+    selected = conv_select.get()
+    if selected == 'ft/s to mph':
+        try:
+            conv_value = float(conv_entry.get())
+            print(f'Entry: {conv_value}')
+            result = round(conv_value / 1.467, 2)
+            conv_result.configure(text=f'{result}mph')
+        except:
+            print('Invalid Input')
+            conv_result.configure(text='Invalid Input')
+    elif selected == 'mph to ft/s':
+        try:
+            conv_value = float(conv_entry.get())
+            print(f'Entry: {conv_value}')
+            result = round(conv_value * 1.467, 2)
+            conv_result.configure(text=f'{result}ft/s')
+        except:
+            print('Invalid Input')
+            conv_result.configure(text='Invalid Input')
+    elif selected == 'm/s to km/h':
+        try:
+            conv_value = float(conv_entry.get())
+            print(f'Entry: {conv_value}')
+            result = round(conv_value * 3.6, 2)
+            conv_result.configure(text=f'{result}km/h')
+        except:
+            print('Invalid Input')
+            conv_result.configure(text='Invalid Input')
+    elif selected == 'km/h to m/s':
+        try:
+            conv_value = float(conv_entry.get())
+            print(f'Entry: {conv_value}')
+            result = round(conv_value / 3.6, 2)
+            conv_result.configure(text=f'{result}m/s')
+        except:
+            print('Invalid Input')
+            conv_result.configure(text='Invalid Input')
+    else:
+        conv_result.configure(text='Please select a conversion.')
 
-# Unit System Dropdown
+def kinematics():
+    selected = kine_select.get()
+    if selected == 'Speed/Velocity':
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} d/t')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected == 'Time':
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} t')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected == 'Distance/Displacement':
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 * kine_value2, 2)
+            kine_result.configure(text=f'{result} d')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected == 'Acceleration':
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} d/t/t')
+        except:
+            kine_result.configure(text='Invalid Input')
+    else:
+        kine_result.configure(text='Please select a measure.')
 
 unit_options = ['Imperial System', 'Metric System']
 
@@ -171,16 +246,10 @@ def change_unit_menu(selection):
         print('System not selected.')
     global conv_options
     if unit_system == 'imperial':
-        small_unit = 'feet'
-        large_unit = 'miles'
-        conv_options = ['feet/s to miles/h', 'miles/h to feet/s']
+        conv_options = ['ft/s to mph', 'mph to ft/s']
     elif unit_system == 'metric':
-        small_unit = 'm'
-        large_unit = 'km'
         conv_options = ['m/s to km/h', 'km/h to m/s']
     else:
-        small_unit = ''
-        large_unit = ''
         conv_options = ['Select a unit system']
     conv_select.configure(values=conv_options)
 
@@ -194,6 +263,9 @@ unit_menu.grid(row=2, column=1)
 
 # Conversion Frame
 
+def change_conv(selection):
+    print(f'Conversion selected: {selection}')
+
 conv_frame = tk.CTkFrame(main_frame)
 conv_frame.grid(row=3, column=0, sticky='nsew', padx=20, pady=20)
 
@@ -205,10 +277,6 @@ conv_label = tk.CTkLabel(
     justify='center'
 )
 conv_label.pack(pady=10)
-
-def change_conv(selection):
-    global unit_system
-    print('cool')
 
 conv_select = tk.CTkOptionMenu(
     conv_frame,
@@ -225,18 +293,87 @@ conv_entry = tk.CTkEntry(
 )
 conv_entry.pack(pady=10)
 
-conv_value = conv_entry.get()
-
 conv_button = tk.CTkButton(
     conv_frame,
-    text='Convert'
+    text='Convert',
+    command=convert
 )
 conv_button.pack(pady=10)
 
+conv_result = tk.CTkLabel(
+    conv_frame,
+    text='',
+    font=('Arial', 12)
+)
+
+conv_result.pack(pady=10)
+
 # Kinematics Frame
+
+def change_kine(selection):
+    print(f'To find: {selection}')
+    if selection == 'Speed/Velocity':
+        kine_entry1.configure(placeholder_text='Enter Distance/Displacement')
+        kine_entry2.configure(placeholder_text='Enter Time')
+    elif selection == 'Time':
+        kine_entry1.configure(placeholder_text='Enter Distance/Displacement')
+        kine_entry2.configure(placeholder_text='Enter Speed/Velocity/Acceleration')
+    elif selection == 'Distance/Displacement':
+        kine_entry1.configure(placeholder_text='Enter Speed/Velocity/Acceleration')
+        kine_entry2.configure(placeholder_text='Enter Time')
+    elif selection == 'Acceleration':
+        kine_entry1.configure(placeholder_text='Enter Speed/Velocity')
+        kine_entry2.configure(placeholder_text='Enter Time')
+
 
 kine_frame = tk.CTkFrame(main_frame)
 kine_frame.grid(row=3, column=1, sticky='nsew', padx=20, pady=20)
+
+kine_label = tk.CTkLabel(
+    kine_frame,
+    text='Kinematics',
+    font=('Arial', 15),
+    text_color='white',
+    justify='center'
+)
+kine_label.pack(pady=10)
+
+kine_select = tk.CTkOptionMenu(
+    kine_frame,
+    values=kine_options,
+    command=change_kine
+)
+
+kine_select.pack(pady=10)
+
+kine_entry1 = tk.CTkEntry(
+    kine_frame,
+    placeholder_text='Enter value...',
+    width=200
+)
+kine_entry1.pack(pady=10)
+
+kine_entry2 = tk.CTkEntry(
+    kine_frame,
+    placeholder_text='Enter value...',
+    width=200
+)
+kine_entry2.pack(pady=10)
+
+kine_button = tk.CTkButton(
+    kine_frame,
+    text='Calculate',
+    command=kinematics
+)
+kine_button.pack(pady=10)
+
+kine_result = tk.CTkLabel(
+    kine_frame,
+    text='',
+    font=('Arial', 12)
+)
+
+kine_result.pack(pady=10)
 
 # Force Frame
 
