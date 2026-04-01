@@ -1,5 +1,6 @@
 import customtkinter as tk
 from PIL import Image, ImageTk
+import pyglet
 
 tk.set_appearance_mode('dark')
 
@@ -8,10 +9,13 @@ root.title("Cool GUI Program")
 root.geometry('1000x800')
 root.attributes("-fullscreen", True)
 
-unit_system = 'Imperial System'
+unit_system = 'Select a Unit System'
 conv_options = ['Select Unit System']
-kine_options = ['Speed/Velocity', 'Time', 'Distance/Displacement', 'Acceleration']
+kine_options1 = ['Select Unit System']
+kine_options2 = ['Select Unit System']
+force_options = ['Force', 'Mass', 'Acceleration']
 
+# Pyglet Sounds
 
 # BASIC FUNCTIONS
 
@@ -148,7 +152,7 @@ title_label = tk.CTkLabel(
     text_color='white',
     justify='center'
 )
-title_label.grid(row=1, column=1, pady=40)
+title_label.grid(row=0, column=0, columnspan=3, pady=40)
 
 # Math Functions
 
@@ -159,7 +163,7 @@ def convert():
             conv_value = float(conv_entry.get())
             print(f'Entry: {conv_value}')
             result = round(conv_value / 1.467, 2)
-            conv_result.configure(text=f'{result}mph')
+            conv_result.configure(text=f'{result} mph')
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -168,7 +172,7 @@ def convert():
             conv_value = float(conv_entry.get())
             print(f'Entry: {conv_value}')
             result = round(conv_value * 1.467, 2)
-            conv_result.configure(text=f'{result}ft/s')
+            conv_result.configure(text=f'{result} ft/s')
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -177,7 +181,7 @@ def convert():
             conv_value = float(conv_entry.get())
             print(f'Entry: {conv_value}')
             result = round(conv_value * 3.6, 2)
-            conv_result.configure(text=f'{result}km/h')
+            conv_result.configure(text=f'{result} km/h')
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -186,7 +190,7 @@ def convert():
             conv_value = float(conv_entry.get())
             print(f'Entry: {conv_value}')
             result = round(conv_value / 3.6, 2)
-            conv_result.configure(text=f'{result}m/s')
+            conv_result.configure(text=f'{result} m/s')
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -194,46 +198,168 @@ def convert():
         conv_result.configure(text='Please select a conversion.')
 
 def kinematics():
-    selected = kine_select.get()
-    if selected == 'Speed/Velocity':
+    selected1 = kine_select1.get()
+    selected2 = kine_select2.get()
+    if selected1 == 'Speed/Velocity' and selected2 == 'ft/s':
+        d = 'ft'
+        t = 's'
         try:
             kine_value1 = float(kine_entry1.get())
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
-            kine_result.configure(text=f'{result} d/t')
+            kine_result.configure(text=f'{result} {d}/{t}')
         except:
             kine_result.configure(text='Invalid Input')
-    elif selected == 'Time':
+    elif selected1 == 'Speed/Velocity' and selected2 == 'mph':
         try:
             kine_value1 = float(kine_entry1.get())
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
-            kine_result.configure(text=f'{result} t')
+            kine_result.configure(text=f'{result} mph')
         except:
             kine_result.configure(text='Invalid Input')
-    elif selected == 'Distance/Displacement':
+    elif selected1 == 'Speed/Velocity' and selected2 == 'm/s':
+        d = 'm'
+        t = 's'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}/{t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Speed/Velocity' and selected2 == 'km/h':
+        d = 'km'
+        t = 'h'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}/{t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Time' and selected2 == 'ft/s':
+        t = 's'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Time' and selected2 == 'mph':
+        t = 'h'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Time' and selected2 == 'm/s':
+        t = 's'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Time' and selected2 == 'km/h':
+        t = 'h'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Distance/Displacement' and selected2 == 'ft/s':
+        d = 'ft'
         try:
             kine_value1 = float(kine_entry1.get())
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 * kine_value2, 2)
-            kine_result.configure(text=f'{result} d')
+            kine_result.configure(text=f'{result} {d}')
         except:
             kine_result.configure(text='Invalid Input')
-    elif selected == 'Acceleration':
+    elif selected1 == 'Distance/Displacement' and selected2 == 'mph':
+        d = 'miles'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 * kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Distance/Displacement' and selected2 == 'm/s':
+        d = 'm'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 * kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Distance/Displacement' and selected2 == 'km/h':
+        d = 'km'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 * kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Acceleration' and selected2 == 'ft/s':
+        d = 'ft'
+        t = 's'
         try:
             kine_value1 = float(kine_entry1.get())
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
-            kine_result.configure(text=f'{result} d/t/t')
+            kine_result.configure(text=f'{result} {d}/{t}/{t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Acceleration' and selected2 == 'mph':
+        d = 'miles'
+        t = 'h'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}/{t}/{t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Acceleration' and selected2 == 'm/s':
+        d = 'm'
+        t = 's'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}/{t}/{t}')
+        except:
+            kine_result.configure(text='Invalid Input')
+    elif selected1 == 'Acceleration' and selected2 == 'km/h':
+        d = 'km'
+        t = 'h'
+        try:
+            kine_value1 = float(kine_entry1.get())
+            kine_value2 = float(kine_entry2.get())
+            result = round(kine_value1 / kine_value2, 2)
+            kine_result.configure(text=f'{result} {d}/{t}/{t}')
         except:
             kine_result.configure(text='Invalid Input')
     else:
         kine_result.configure(text='Please select a measure.')
 
+def force():
+    print('force')
+
 unit_options = ['Imperial System', 'Metric System']
 
 def change_unit_menu(selection):
-    global unit_system
+    global unit_system, conv_options, kine_options1, kine_options2
     print(f'Current unit system: {selection}.')
     if selection == 'Imperial System':
         unit_system = 'imperial'
@@ -244,14 +370,29 @@ def change_unit_menu(selection):
     else:
         unit_system = 'undefined'
         print('System not selected.')
-    global conv_options
+
     if unit_system == 'imperial':
         conv_options = ['ft/s to mph', 'mph to ft/s']
     elif unit_system == 'metric':
         conv_options = ['m/s to km/h', 'km/h to m/s']
     else:
-        conv_options = ['Select a unit system']
+        conv_options = ['Select Unit System']
     conv_select.configure(values=conv_options)
+    conv_select.set('Select a Conversion')
+
+    kine_options1 = ['Speed/Velocity', 'Time', 'Distance/Displacement', 'Acceleration']
+    kine_select1.configure(values=kine_options1)
+    kine_select1.set('Select a Measure')
+
+    if unit_system == 'imperial':
+        kine_options2 = ['ft/s', 'mph']
+    elif unit_system == 'metric':
+        kine_options2 = ['m/s', 'km/h']
+    else:
+        kine_options2 = ['Select Unit System']
+    kine_select2.configure(values=kine_options2)
+    kine_select2.set('Select a Measure')
+
 
 unit_menu = tk.CTkOptionMenu(
     main_frame,
@@ -338,13 +479,21 @@ kine_label = tk.CTkLabel(
 )
 kine_label.pack(pady=10)
 
-kine_select = tk.CTkOptionMenu(
+kine_select1 = tk.CTkOptionMenu(
     kine_frame,
-    values=kine_options,
+    values=kine_options1,
     command=change_kine
 )
 
-kine_select.pack(pady=10)
+kine_select1.pack(pady=10)
+
+kine_select2 = tk.CTkOptionMenu(
+    kine_frame,
+    values=kine_options2,
+    command=change_kine
+)
+
+kine_select2.pack(pady=10)
 
 kine_entry1 = tk.CTkEntry(
     kine_frame,
@@ -377,9 +526,63 @@ kine_result.pack(pady=10)
 
 # Force Frame
 
+def change_force(selection):
+    print(f'To Find: {selection}')
+    if selection == 'Force':
+        force_entry1.configure(placeholder_text='Enter Mass(kg)')
+        force_entry2.configure(placeholder_text='Enter Acceleration(m/s)')
+    elif selection == 'Mass':
+        force_entry1.configure(placeholder_text='Enter Force(N)')
+        force_entry2.configure(placeholder_text='Enter Acceleration(m/s)')
+    elif selection == 'Acceleration':
+        force_entry1.configure(placeholder_text='Enter Force(N)')
+        force_entry2.configure(placeholder_text='Enter Mass(kg)')
+
+
 force_frame = tk.CTkFrame(main_frame)
 force_frame.grid(row=3, column=2, sticky='nsew', padx=20, pady=20)
 
+force_label = tk.CTkLabel(
+    force_frame,
+    text='Force',
+    font=('Arial', 15),
+    text_color='white',
+    justify='center'
+)
+force_label.pack(pady=10)
+
+force_select = tk.CTkOptionMenu(
+    force_frame,
+    values=force_options,
+    command=change_force
+)
+force_select.pack(pady=10)
+
+force_entry1 = tk.CTkEntry(
+    force_frame,
+    width=200
+)
+force_entry1.pack(pady=10)
+
+force_entry2 = tk.CTkEntry(
+    force_frame,
+    width=200
+)
+force_entry2.pack(pady=10)
+
+force_button = tk.CTkButton(
+    force_frame,
+    text='Calculate',
+    command=force
+)
+force_button.pack(pady=10)
+
+force_result = tk.CTkLabel(
+    force_frame,
+    text='',
+    font=('Arial', 12)
+)
+force_result.pack(pady=10)
 
 # Settings Frame
 
@@ -389,5 +592,4 @@ def settings_frame(event=None):
 # START ANIMATION
 fade_in()
 root.after(500, fade_text)
-
 root.mainloop()
