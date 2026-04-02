@@ -1,8 +1,14 @@
 import customtkinter as tk
 from PIL import Image, ImageTk
-import pyglet
+import pygame
+
+pygame.mixer.init()
 
 tk.set_appearance_mode('dark')
+
+settings_open = False
+
+volume = 0.5
 
 root = tk.CTk()
 root.title("Cool GUI Program")
@@ -13,9 +19,20 @@ unit_system = 'Select a Unit System'
 conv_options = ['Select Unit System']
 kine_options1 = ['Select Unit System']
 kine_options2 = ['Select Unit System']
-force_options = ['Force', 'Mass', 'Acceleration']
+force_options = ['Force(N)', 'Mass(kg)', 'Acceleration(m/s/s)']
 
-# Pyglet Sounds
+# Pygame Sounds
+
+button_click = pygame.mixer.Sound('click.wav')
+whoop = pygame.mixer.Sound('whoop.wav')
+
+# Pygame Sound Functions
+
+def play_button_click():
+    button_click.play()
+
+def play_whoop():
+    whoop.play()
 
 # BASIC FUNCTIONS
 
@@ -46,7 +63,6 @@ intro_text = tk.CTkLabel(
     intro_frame,
     text='Jackson Swiderski',
     font=('Arial', 30, 'bold'),
-    text_color="black"
 )
 intro_text.pack()
 
@@ -99,7 +115,6 @@ def fade_out(step=100):
 # TO PROGRAM
 
 def continue_to_program():
-    root.bind('<Tab>', settings_frame)
     welcome_frame.destroy()
     main_frame.pack(fill='both', expand=True)
 
@@ -120,7 +135,7 @@ description_label = tk.CTkLabel(
     text='This is my official GUI for my Tkinter Assignment.\n'
          'This is a calculator program for simple physics kinematics and force equations.\n\n'
          'Press ESC to exit fullscreen, F11 to re-enter.\n'
-         'Additionally, press Tab to enter the settings menu.\n\n'
+         'Additionally, press F2 to enter the settings menu.\n\n'
          'Press the button below to continue...',
     wraplength=600,
     font=('Arial', 25),
@@ -134,7 +149,7 @@ continue_button = tk.CTkButton(
     text='Continue',
     font=('Arial', 14),
     border_width=2,
-    command=continue_to_program
+    command=lambda: [play_button_click(), continue_to_program()]
 )
 continue_button.pack(pady=40)
 
@@ -354,12 +369,39 @@ def kinematics():
         kine_result.configure(text='Please select a measure.')
 
 def force():
-    print('force')
+    selected = force_select.get()
+    if selected == 'Force':
+        try:
+            force_value1 = float(force_entry1.get())
+            force_value2 = float(force_entry2.get())
+            result = round(force_value1 * force_value2, 2)
+            force_result.configure(text=f'{result} N')
+        except:
+            force_result.configure(text='Invalid Input')
+    elif selected == 'Mass':
+        try:
+            force_value1 = float(force_entry1.get())
+            force_value2 = float(force_entry2.get())
+            result = round(force_value1 / force_value2, 2)
+            force_result.configure(text=f'{result} kg')
+        except:
+            force_result.configure(text='Invalid Input')
+    elif selected == 'Acceleration':
+        try:
+            force_value1 = float(force_entry1.get())
+            force_value2 = float(force_entry2.get())
+            result = round(force_value1 / force_value2, 2)
+            force_result.configure(text=f'{result} m/s/s')
+        except:
+            force_result.configure(text='Invalid Input')
+    else:
+        force_result.configure(text='Please select a measure.')
 
 unit_options = ['Imperial System', 'Metric System']
 
 def change_unit_menu(selection):
     global unit_system, conv_options, kine_options1, kine_options2
+    play_whoop()
     print(f'Current unit system: {selection}.')
     if selection == 'Imperial System':
         unit_system = 'imperial'
@@ -393,7 +435,6 @@ def change_unit_menu(selection):
     kine_select2.configure(values=kine_options2)
     kine_select2.set('Select a Measure')
 
-
 unit_menu = tk.CTkOptionMenu(
     main_frame,
     values=unit_options,
@@ -405,6 +446,7 @@ unit_menu.grid(row=2, column=1)
 # Conversion Frame
 
 def change_conv(selection):
+    play_whoop()
     print(f'Conversion selected: {selection}')
 
 conv_frame = tk.CTkFrame(main_frame)
@@ -413,7 +455,7 @@ conv_frame.grid(row=3, column=0, sticky='nsew', padx=20, pady=20)
 conv_label = tk.CTkLabel(
     conv_frame,
     text='Conversions',
-    font=('Arial', 15),
+    font=('Arial', 18),
     text_color='white',
     justify='center'
 )
@@ -437,7 +479,7 @@ conv_entry.pack(pady=10)
 conv_button = tk.CTkButton(
     conv_frame,
     text='Convert',
-    command=convert
+    command=lambda: [convert(), play_button_click()]
 )
 conv_button.pack(pady=10)
 
@@ -452,6 +494,7 @@ conv_result.pack(pady=10)
 # Kinematics Frame
 
 def change_kine(selection):
+    play_whoop()
     print(f'To find: {selection}')
     if selection == 'Speed/Velocity':
         kine_entry1.configure(placeholder_text='Enter Distance/Displacement')
@@ -473,7 +516,7 @@ kine_frame.grid(row=3, column=1, sticky='nsew', padx=20, pady=20)
 kine_label = tk.CTkLabel(
     kine_frame,
     text='Kinematics',
-    font=('Arial', 15),
+    font=('Arial', 18),
     text_color='white',
     justify='center'
 )
@@ -512,7 +555,7 @@ kine_entry2.pack(pady=10)
 kine_button = tk.CTkButton(
     kine_frame,
     text='Calculate',
-    command=kinematics
+    command=lambda: [kinematics(), play_button_click()]
 )
 kine_button.pack(pady=10)
 
@@ -527,6 +570,7 @@ kine_result.pack(pady=10)
 # Force Frame
 
 def change_force(selection):
+    play_whoop()
     print(f'To Find: {selection}')
     if selection == 'Force':
         force_entry1.configure(placeholder_text='Enter Mass(kg)')
@@ -545,7 +589,7 @@ force_frame.grid(row=3, column=2, sticky='nsew', padx=20, pady=20)
 force_label = tk.CTkLabel(
     force_frame,
     text='Force',
-    font=('Arial', 15),
+    font=('Arial', 18),
     text_color='white',
     justify='center'
 )
@@ -573,7 +617,7 @@ force_entry2.pack(pady=10)
 force_button = tk.CTkButton(
     force_frame,
     text='Calculate',
-    command=force
+    command=lambda: [force(), play_button_click()]
 )
 force_button.pack(pady=10)
 
@@ -586,8 +630,30 @@ force_result.pack(pady=10)
 
 # Settings Frame
 
-def settings_frame(event=None):
-    print('Hello')
+settings_frame = tk.CTkFrame(root, fg_color='black', border_width=2)
+
+settings_frame.place(relx=0.5, rely=0.5, anchor='center', relwidth=0.4, relheight=0.5)
+settings_frame.place_forget()
+
+settings_label = tk.CTkLabel(
+    settings_frame,
+    text='Settings',
+    font=('Arial', 18),
+    justify='center'
+)
+settings_label.pack(pady=10)
+
+def toggle_settings(event=None):
+    global settings_open
+    play_whoop()
+    if settings_open:
+        settings_frame.place_forget()
+        settings_open = False
+    else:
+        settings_frame.place(relx=0.5, rely=0.5, anchor='center', relwidth=0.4, relheight=0.5)
+        settings_open = True
+
+root.bind('<F2>', toggle_settings)
 
 # START ANIMATION
 fade_in()
