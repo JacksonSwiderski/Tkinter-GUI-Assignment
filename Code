@@ -7,11 +7,10 @@ pygame.mixer.init()
 tk.set_appearance_mode('dark')
 
 settings_open = False
-
-volume = 0.5
+sound_on = True
 
 root = tk.CTk()
-root.title("Cool GUI Program")
+root.title("JS Physics Calculator")
 root.geometry('1000x800')
 root.attributes("-fullscreen", True)
 
@@ -25,14 +24,29 @@ force_options = ['Force(N)', 'Mass(kg)', 'Acceleration(m/s/s)']
 
 button_click = pygame.mixer.Sound('click.wav')
 whoop = pygame.mixer.Sound('whoop.wav')
+jackpot = pygame.mixer.Sound('jackpot.mp3')
 
 # Pygame Sound Functions
 
 def play_button_click():
-    button_click.play()
+    if sound_on:
+        button_click.play()
+    else:
+        print('Sound is off.')
 
 def play_whoop():
-    whoop.play()
+    if sound_on:
+        whoop.play()
+    else:
+        print('Sound is off.')
+
+# EASTER EGG Sounds
+
+def play_jackpot():
+    if sound_on:
+        jackpot.play()
+    else:
+        print('Sound is off.')
 
 # BASIC FUNCTIONS
 
@@ -50,7 +64,7 @@ root.bind('<Escape>', exit_fs)
 root.bind('<space>', skip_intro)
 
 # INTRO FRAME
-intro_frame = tk.CTkFrame(root, fg_color="black")
+intro_frame = tk.CTkFrame(root)
 intro_frame.pack(fill='both', expand=True)
 
 intro_image = Image.open('new_logo.png').resize((400, 400))
@@ -120,13 +134,12 @@ def continue_to_program():
 
 # WELCOME FRAME
 
-welcome_frame = tk.CTkFrame(root, fg_color="black")
+welcome_frame = tk.CTkFrame(root)
 
 welcome_label = tk.CTkLabel(
     welcome_frame,
     text='Welcome!',
-    font=('Arial', 40, 'bold'),
-    text_color="white"
+    font=('Arial', 40, 'bold')
 )
 welcome_label.pack(pady=(180, 20))
 
@@ -139,7 +152,6 @@ description_label = tk.CTkLabel(
          'Press the button below to continue...',
     wraplength=600,
     font=('Arial', 25),
-    text_color="white",
     justify="center"
 )
 description_label.pack(pady=(0, 15))
@@ -155,7 +167,7 @@ continue_button.pack(pady=40)
 
 # Main Frame
 
-main_frame = tk.CTkFrame(root, fg_color='black')
+main_frame = tk.CTkFrame(root)
 
 for i in range(3):
     main_frame.grid_columnconfigure(i, weight=1)
@@ -164,7 +176,6 @@ title_label = tk.CTkLabel(
     main_frame,
     text='BASIC KINEMATICS/FORCE CALCULATOR',
     font=('Arial', 30, 'bold'),
-    text_color='white',
     justify='center'
 )
 title_label.grid(row=0, column=0, columnspan=3, pady=40)
@@ -179,6 +190,8 @@ def convert():
             print(f'Entry: {conv_value}')
             result = round(conv_value / 1.467, 2)
             conv_result.configure(text=f'{result} mph')
+            if result == 777.0:
+                play_jackpot()
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -188,6 +201,8 @@ def convert():
             print(f'Entry: {conv_value}')
             result = round(conv_value * 1.467, 2)
             conv_result.configure(text=f'{result} ft/s')
+            if result == 777.0:
+                play_jackpot()
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -197,6 +212,8 @@ def convert():
             print(f'Entry: {conv_value}')
             result = round(conv_value * 3.6, 2)
             conv_result.configure(text=f'{result} km/h')
+            if result == 777.0:
+                play_jackpot()
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -206,6 +223,8 @@ def convert():
             print(f'Entry: {conv_value}')
             result = round(conv_value / 3.6, 2)
             conv_result.configure(text=f'{result} m/s')
+            if result == 777.0:
+                play_jackpot()
         except:
             print('Invalid Input')
             conv_result.configure(text='Invalid Input')
@@ -223,6 +242,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Speed/Velocity' and selected2 == 'mph':
@@ -231,6 +252,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} mph')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Speed/Velocity' and selected2 == 'm/s':
@@ -241,6 +264,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Speed/Velocity' and selected2 == 'km/h':
@@ -251,6 +276,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Time' and selected2 == 'ft/s':
@@ -260,6 +287,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Time' and selected2 == 'mph':
@@ -269,6 +298,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Time' and selected2 == 'm/s':
@@ -278,6 +309,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Time' and selected2 == 'km/h':
@@ -287,6 +320,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Distance/Displacement' and selected2 == 'ft/s':
@@ -296,6 +331,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 * kine_value2, 2)
             kine_result.configure(text=f'{result} {d}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Distance/Displacement' and selected2 == 'mph':
@@ -305,6 +342,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 * kine_value2, 2)
             kine_result.configure(text=f'{result} {d}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Distance/Displacement' and selected2 == 'm/s':
@@ -314,6 +353,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 * kine_value2, 2)
             kine_result.configure(text=f'{result} {d}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Distance/Displacement' and selected2 == 'km/h':
@@ -323,6 +364,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 * kine_value2, 2)
             kine_result.configure(text=f'{result} {d}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Acceleration' and selected2 == 'ft/s':
@@ -333,6 +376,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Acceleration' and selected2 == 'mph':
@@ -343,6 +388,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Acceleration' and selected2 == 'm/s':
@@ -353,6 +400,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     elif selected1 == 'Acceleration' and selected2 == 'km/h':
@@ -363,6 +412,8 @@ def kinematics():
             kine_value2 = float(kine_entry2.get())
             result = round(kine_value1 / kine_value2, 2)
             kine_result.configure(text=f'{result} {d}/{t}/{t}')
+            if result == 777.0:
+                play_jackpot()
         except:
             kine_result.configure(text='Invalid Input')
     else:
@@ -370,32 +421,39 @@ def kinematics():
 
 def force():
     selected = force_select.get()
-    if selected == 'Force':
+    if selected == 'Force(N)':
         try:
             force_value1 = float(force_entry1.get())
             force_value2 = float(force_entry2.get())
             result = round(force_value1 * force_value2, 2)
             force_result.configure(text=f'{result} N')
+            if result == 777.0:
+                play_jackpot()
         except:
             force_result.configure(text='Invalid Input')
-    elif selected == 'Mass':
+    elif selected == 'Mass(kg)':
         try:
             force_value1 = float(force_entry1.get())
             force_value2 = float(force_entry2.get())
             result = round(force_value1 / force_value2, 2)
             force_result.configure(text=f'{result} kg')
+            if result == 777.0:
+                play_jackpot()
         except:
             force_result.configure(text='Invalid Input')
-    elif selected == 'Acceleration':
+    elif selected == 'Acceleration(m/s/s)':
         try:
             force_value1 = float(force_entry1.get())
             force_value2 = float(force_entry2.get())
             result = round(force_value1 / force_value2, 2)
             force_result.configure(text=f'{result} m/s/s')
+            if result == 777.0:
+                play_jackpot()
         except:
             force_result.configure(text='Invalid Input')
     else:
         force_result.configure(text='Please select a measure.')
+
 
 unit_options = ['Imperial System', 'Metric System']
 
@@ -456,7 +514,6 @@ conv_label = tk.CTkLabel(
     conv_frame,
     text='Conversions',
     font=('Arial', 18),
-    text_color='white',
     justify='center'
 )
 conv_label.pack(pady=10)
@@ -517,7 +574,6 @@ kine_label = tk.CTkLabel(
     kine_frame,
     text='Kinematics',
     font=('Arial', 18),
-    text_color='white',
     justify='center'
 )
 kine_label.pack(pady=10)
@@ -572,13 +628,13 @@ kine_result.pack(pady=10)
 def change_force(selection):
     play_whoop()
     print(f'To Find: {selection}')
-    if selection == 'Force':
+    if selection == 'Force(N)':
         force_entry1.configure(placeholder_text='Enter Mass(kg)')
         force_entry2.configure(placeholder_text='Enter Acceleration(m/s)')
-    elif selection == 'Mass':
+    elif selection == 'Mass(kg)':
         force_entry1.configure(placeholder_text='Enter Force(N)')
         force_entry2.configure(placeholder_text='Enter Acceleration(m/s)')
-    elif selection == 'Acceleration':
+    elif selection == 'Acceleration(m/s/s)':
         force_entry1.configure(placeholder_text='Enter Force(N)')
         force_entry2.configure(placeholder_text='Enter Mass(kg)')
 
@@ -590,7 +646,6 @@ force_label = tk.CTkLabel(
     force_frame,
     text='Force',
     font=('Arial', 18),
-    text_color='white',
     justify='center'
 )
 force_label.pack(pady=10)
@@ -630,7 +685,7 @@ force_result.pack(pady=10)
 
 # Settings Frame
 
-settings_frame = tk.CTkFrame(root, fg_color='black', border_width=2)
+settings_frame = tk.CTkFrame(root, border_width=2)
 
 settings_frame.place(relx=0.5, rely=0.5, anchor='center', relwidth=0.4, relheight=0.5)
 settings_frame.place_forget()
@@ -641,7 +696,57 @@ settings_label = tk.CTkLabel(
     font=('Arial', 18),
     justify='center'
 )
-settings_label.pack(pady=10)
+settings_label.pack(pady=20)
+
+def toggle_theme():
+    current = tk.get_appearance_mode()
+    tk.set_appearance_mode('light' if current == 'Dark' else 'dark')
+
+theme_button = tk.CTkButton(
+    settings_frame,
+    text='Toggle Light/Dark Mode',
+    command=lambda: [toggle_theme(), play_button_click()]
+)
+theme_button.pack(pady=20)
+
+def toggle_sound():
+    global sound_on
+    sound_on = not sound_on
+    print('Sound:', 'On' if sound_on else 'Off')
+
+sound_button = tk.CTkButton(
+    settings_frame,
+    text='Toggle Sound Effects',
+    command=lambda: [toggle_sound(), play_button_click()])
+sound_button.pack(pady=20)
+
+volume_label = tk.CTkLabel(
+    settings_frame,
+    text='Volume'
+)
+volume_label.pack()
+
+value_label = tk.CTkLabel(
+    settings_frame,
+    text='50%'
+)
+value_label.pack()
+
+def set_volume(v):
+    percent = int(v*100)
+    value_label.configure(text=f'{percent}%')
+    button_click.set_volume(v)
+    whoop.set_volume(v)
+    jackpot.set_volume(v)
+
+volume_slider = tk.CTkSlider(
+    settings_frame,
+    from_=0,
+    to=1,
+    command=set_volume
+)
+volume_slider.set(0.5)
+volume_slider.pack()
 
 def toggle_settings(event=None):
     global settings_open
@@ -654,6 +759,12 @@ def toggle_settings(event=None):
         settings_open = True
 
 root.bind('<F2>', toggle_settings)
+
+close_button = tk.CTkButton(
+    settings_frame,
+    text='Close',
+    command=lambda: [toggle_settings(), play_button_click()])
+close_button.pack(pady=30)
 
 # START ANIMATION
 fade_in()
